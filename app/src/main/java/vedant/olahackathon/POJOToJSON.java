@@ -33,23 +33,35 @@ public class POJOToJSON {
 //    }
 
     public static String toJson(Object pojo, boolean prettyPrint)
-            throws IOException {
-        StringWriter sw = new StringWriter();
-        JsonGenerator jg = jsonFactory.createJsonGenerator(sw);
-        if (prettyPrint) {
-            jg.useDefaultPrettyPrinter();
-        }
-        objectMapper.writeValue(jg, pojo);
-        return sw.toString();
+             {
+                 try {
+                     StringWriter sw = new StringWriter();
+                     JsonGenerator jg = jsonFactory.createJsonGenerator(sw);
+                     if (prettyPrint) {
+                         jg.useDefaultPrettyPrinter();
+                     }
+                     objectMapper.writeValue(jg, pojo);
+                     return sw.toString();
+                 }catch (Exception e)
+                 {
+                     Log.d(TAG,"Error in Parsing");
+                     return null;
+                 }
+
     }
 
     public static void toJson(Object pojo, FileWriter fw, boolean prettyPrint)
-            throws IOException {
-        JsonGenerator jg = jsonFactory.createJsonGenerator(fw);
-        if (prettyPrint) {
-            jg.useDefaultPrettyPrinter();
-        }
-        objectMapper.writeValue(jg, pojo);
+             {
+                 try {
+                     JsonGenerator jg = jsonFactory.createJsonGenerator(fw);
+                     if (prettyPrint) {
+                         jg.useDefaultPrettyPrinter();
+                     }
+                     objectMapper.writeValue(jg, pojo);
+                 }catch (Exception e)
+                 {
+                     Log.d(TAG,"Error in Parsing");
+                 }
     }
 
 }
