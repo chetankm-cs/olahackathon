@@ -5,12 +5,12 @@ android {
         config {
             keyAlias 'ola'
             keyPassword 'olaola'
-            storeFile file('/home/vedant/android/src/OlaHackathon/key.jks')
+            storeFile file('../key.jks')
             storePassword 'olaola'
         }
     }
     compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
         applicationId "vedant.olahackathon"

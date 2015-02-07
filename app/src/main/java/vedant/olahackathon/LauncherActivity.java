@@ -1,19 +1,30 @@
 package vedant.olahackathon;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 
-public class LauncherActivity extends ActionBarActivity {
-
+public class LauncherActivity extends ActionBarActivity implements View.OnClickListener {
+    public final static String KEY_READABLE_ADDRESS = "address";
+    Button bookRide;
+    EditText pnr;
+    EditText location;
+    ImageView setLocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
+        new GCMAcitivityRegister(this);
+        initView();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -21,6 +32,7 @@ public class LauncherActivity extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.menu_launcher, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -35,5 +47,41 @@ public class LauncherActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initView() {
+        bookRide = (Button) findViewById(R.id.book_ride_button);
+        pnr = (EditText) findViewById(R.id.pnr_edit_text);
+        location =(EditText) findViewById(R.id.location_edittext);
+        setLocation = (ImageView) findViewById(R.id.get_location_button);
+
+        bookRide.setOnClickListener(this);
+        setLocation.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            String str = data.getStringExtra(KEY_READABLE_ADDRESS);
+            if(str != null) {
+                Log.e("Launcher Activity", str);
+                location.setText(str);
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId())
+        {
+            case R.id.book_ride_button :
+
+                break;
+
+            case R.id.get_location_button:
+                startActivityForResult(new Intent(this,SelectLocationActivity.class),5);
+                break;
+        }
     }
 }
