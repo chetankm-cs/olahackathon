@@ -10,13 +10,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 
 public class LauncherActivity extends ActionBarActivity implements View.OnClickListener {
     public final static String KEY_READABLE_ADDRESS = "address";
     Button bookRide;
     EditText pnr;
-    EditText location;
+    TextView location;
     ImageView setLocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +53,10 @@ public class LauncherActivity extends ActionBarActivity implements View.OnClickL
     private void initView() {
         bookRide = (Button) findViewById(R.id.book_ride_button);
         pnr = (EditText) findViewById(R.id.pnr_edit_text);
-        location =(EditText) findViewById(R.id.location_edittext);
+        location =(TextView) findViewById(R.id.location_text_view);
         setLocation = (ImageView) findViewById(R.id.get_location_button);
 
+        location.setOnClickListener(this);
         bookRide.setOnClickListener(this);
         setLocation.setOnClickListener(this);
     }
@@ -76,7 +78,19 @@ public class LauncherActivity extends ActionBarActivity implements View.OnClickL
         switch (v.getId())
         {
             case R.id.book_ride_button :
+                if(pnr.getText().toString().isEmpty())
+                    pnr.setError("Please provide a pnr no");
+                else if(location.getText().toString().equals("Drop Location"))
+                    location.setError("Please provide drop point");
+                else
+                {
 
+                }
+
+
+                break;
+            case R.id.location_text_view:
+                startActivityForResult(new Intent(this,SelectLocationActivity.class),5);
                 break;
 
             case R.id.get_location_button:

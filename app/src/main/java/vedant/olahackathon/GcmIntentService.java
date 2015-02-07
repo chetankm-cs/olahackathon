@@ -1,8 +1,10 @@
 package vedant.olahackathon;
 
+import android.app.ActivityManager;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,6 +13,8 @@ import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import java.util.List;
 
 /**
  * Created by USER on 18-01-2015.
@@ -62,7 +66,15 @@ public class GcmIntentService extends IntentService {
 
         Intent intent = new Intent(this, LauncherActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
+        ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+        Log.d("topActivity", "CURRENT Activity ::" + taskInfo.get(0).topActivity.getClassName());
+        ComponentName componentInfo = taskInfo.get(0).topActivity;
+        if(componentInfo.getPackageName().equals(getPackageName()))
+        {
+            Log.e("My activity Running","yo lo ");
+            return;
+        };
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,intent , 0);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
                 this).setSmallIcon(R.drawable.choose_location)

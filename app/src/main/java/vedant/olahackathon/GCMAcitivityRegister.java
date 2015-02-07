@@ -19,7 +19,6 @@ public class GCMAcitivityRegister {
     GoogleCloudMessaging gcm;
     Context context;
     String regId;
-    private String phoneNumber;
 
 
     private static final String APP_VERSION = "appVersion";
@@ -31,15 +30,14 @@ public class GCMAcitivityRegister {
         final SharedPreferences prefs = context.getSharedPreferences(
                 Config.APP_SHARED_PREFERENCE, Context.MODE_PRIVATE);
         regId = prefs.getString(Config.REG_ID,"");
-        Log.w(TAG, " Fucking RegId:"+regId);
         if (TextUtils.isEmpty(regId)) {
             regId = registerGCM();
             Log.d("RegisterActivity", "GCM RegId: " + regId);
         } else {
-            Toast.makeText(context.getApplicationContext(),
-                    "Already Registered with GCM Server!",
-                    Toast.LENGTH_LONG).show();
-            Log.w(TAG, "RegId:"+regId +" phoneNumber:"+phoneNumber);
+//            Toast.makeText(context.getApplicationContext(),
+//                    "Already Registered with GCM Server!",
+//                    Toast.LENGTH_LONG).show();
+            Log.w(TAG, "RegId:"+regId );
         }
     }
 
