@@ -42,44 +42,43 @@ public class GcmIntentService extends IntentService {
         if (!extras.isEmpty()) {
             if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR
                     .equals(messageType)) {
-                sendNotification("Send error: " + extras.toString());
+                sendNotification("Send error: " ,intent.getExtras().toString() );
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED
                     .equals(messageType)) {
                 sendNotification("Deleted messages on server: "
-                        + extras.toString());
+                        ,intent.getExtras().toString());
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE
                     .equals(messageType)) {
 
 
-                sendNotification("Message Received from Google GCM Server: "
-                        + extras.get(Config.MESSAGE_KEY));
-                Log.i(TAG, "Received:::::::: " + extras.toString());
+                sendNotification("Your ride has been booked",intent.getExtras().toString() );
+                Log.w(TAG, "Received:::::::: " + extras.get("hell"));
             }
         }
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    private void sendNotification(String msg) {
-        Log.d(TAG, "Preparing to send notification...: " + msg);
+    private void sendNotification(String msg,String json) {
         mNotificationManager = (NotificationManager) this
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-
-        Intent intent = new Intent(this, LauncherActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Log.e(TAG,json);
+        Intent intent = new Intent(this, RideConfirmationActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("JSON",json);
         ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
-        Log.d("topActivity", "CURRENT Activity ::" + taskInfo.get(0).topActivity.getClassName());
         ComponentName componentInfo = taskInfo.get(0).topActivity;
+
         if(componentInfo.getPackageName().equals(getPackageName()))
         {
-            Log.e("My activity Running","yo lo ");
+            startActivity(intent);
             return;
-        };
+        }
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,intent , 0);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-                this).setSmallIcon(R.drawable.choose_location)
+                this).setSmallIcon(R.drawable.icon_small)
                 .setAutoCancel(true)
-                .setContentTitle("GCM Notification")
+                .setContentTitle("Ride Confirmation")
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                 .setContentText(msg);
 
