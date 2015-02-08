@@ -51,8 +51,8 @@ public class GcmIntentService extends IntentService {
                     .equals(messageType)) {
 
 
-                sendNotification("Your ride has been booked",intent.getExtras().toString() );
-                Log.w(TAG, "Received:::::::: " + extras.get("hell"));
+                sendNotification("Your ride has been booked",extras.get(Config.MESSAGE_KEY).toString());
+                Log.w(TAG, "Received:::::::: " + extras.get(Config.MESSAGE_KEY));
             }
         }
         GcmBroadcastReceiver.completeWakefulIntent(intent);
@@ -74,7 +74,7 @@ public class GcmIntentService extends IntentService {
             startActivity(intent);
             return;
         }
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,intent , 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,intent , PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
                 this).setSmallIcon(R.drawable.icon_small)
                 .setAutoCancel(true)

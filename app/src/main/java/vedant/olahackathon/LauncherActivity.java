@@ -9,13 +9,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 import com.android.volley.Response;
 import com.google.android.gms.maps.model.LatLng;
 import vedant.olahackathon.network.BookingCreateRequest;
+import vedant.olahackathon.network.BookingCreateResponse;
 import vedant.olahackathon.network.VolleyImplementation;
 import vedant.olahackathon.network.WebServicesConstants;
 
@@ -123,6 +121,10 @@ public class LauncherActivity extends ActionBarActivity implements View.OnClickL
             @Override
             public void onResponse(Object response) {
                 Log.d(this.getClass().getSimpleName(),response.toString());
+                BookingCreateResponse out = (BookingCreateResponse) POJOToJSON.fromJson(response.toString(),BookingCreateResponse.class);
+                if(out.getError()==0)
+                Toast.makeText(LauncherActivity.this,"Request for booking sent. You will recieve confirmation upon landing",Toast.LENGTH_LONG).show();
+
             }
         });
         volley.postRequest(WebServicesConstants.CREATE_BOOKING,POJOToJSON.toJson(booking,false));

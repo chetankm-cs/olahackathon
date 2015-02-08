@@ -1,19 +1,47 @@
 package vedant.olahackathon;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import vedant.olahackathon.network.RideConformationResponse;
 
 
 public class RideConfirmationActivity extends ActionBarActivity {
-
+    private String mNumber ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ride_confirmation);
+        setTitle("Booking Success");
         Intent intent = getIntent();
+
+        RideConformationResponse response = (RideConformationResponse)
+                POJOToJSON.fromJson(intent.getStringExtra("JSON"),RideConformationResponse.class);
+
+        Log.e("Ride", POJOToJSON.toJson(response, true));
+
+                ((TextView) findViewById(R.id.name_text_view)).setText(response.getName());
+        ((TextView)findViewById(R.id.vehicle_text_view)).setText(response.getVehicle().getNumber() + " "
+                +response.getVehicle().getType());
+        mNumber = response.getMobile();
+
+        ImageButton btn = (ImageButton) findViewById(R.id.call_button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:9547891002"));
+                startActivity(callIntent);
+            }
+        });
     }
 
 
